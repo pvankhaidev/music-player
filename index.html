@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" class="html">
+  <head class="head">
+    <meta charset="UTF-8" class="meta-charset" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+      class="meta-viewport"
+    />
+    <title class="title">Music Player</title>
+    <!-- Favicon cho các trình duyệt phổ biến -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="favicon_io/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="favicon_io/favicon-16x16.png"
+    />
+    <link
+      rel="shortcut icon"
+      href="favicon_io/favicon.ico"
+      type="image/x-icon"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+      class="font-link"
+    />
+    <link rel="stylesheet" href="./css/reset.css" class="reset-css" />
+    <link rel="stylesheet" href="./css/music-player.css" class="player-css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      class="font-awesome"
+    />
+  </head>
+  <body class="body">
+    <div class="music-player music-player-container">
+      <!-- Header: Cover + Song Info -->
+      <div class="header header-container">
+        <img
+          src="./images/image11.jpg"
+          alt="Album Art"
+          class="cover cover-image"
+        />
+        <div class="song-info song-info-container">
+          <h2 class="song-title song-title-text">Chill Vibes</h2>
+          <p class="artist-name artist-name-text">Lo-fi Artist</p>
+        </div>
+        <button class="control-btn setting-btn">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+      <!-- Controls + Progress -->
+      <div class="controls-section controls-section-container">
+        <!-- Progress -->
+        <div class="progress-container progress-container-box">
+          <span class="current-time current-time-text">0:00</span>
+          <div class="progress-bar progress-bar-container">
+            <div class="progress progress-fill">
+              <div class="progress-handle"></div>
+            </div>
+          </div>
+
+          <span class="duration duration-text">3:45</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls controls-container">
+          <button class="control-btn lyric-btn">
+            <i class="fa-regular fa-closed-captioning"></i>
+          </button>
+          <button class="control-btn shuffle-btn inactive">
+            <i class="fa-solid fa-shuffle icon-shuffle"></i>
+          </button>
+          <button class="control-btn backward-btn">
+            <i class="fa-solid fa-backward icon-backward"></i>
+          </button>
+          <button class="control-btn play-btn">
+            <i class="fa-solid fa-play icon-play"></i>
+          </button>
+          <button class="control-btn forward-btn">
+            <i class="fa-solid fa-forward icon-forward"></i>
+          </button>
+          <button class="control-btn repeat-btn inactive">
+            <i class="fa-solid fa-repeat icon-repeat"></i>
+          </button>
+          <button class="control-btn like-btn">
+            <i class="fa-regular fa-heart"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Lyrics + Playlist -->
+      <div class="bottom-section-container">
+        <!-- Lyrics -->
+        <div class="lyrics-wrapper">
+          <h3 class="lyric-header lyric-header-text">Lyrics</h3>
+          <div class="lyrics-box lyrics-box-container">
+            <p class="lyric lyric-text" onclick="playLyric(1)" data-time="10">
+              Drifting slow through midnight skies
+            </p>
+            <p
+              class="lyric lyric-text lyric-active active"
+              onclick="playLyric(2)"
+              data-time="20"
+            >
+              Thoughts like waves begin to rise
+            </p>
+            <p class="lyric lyric-text" onclick="playLyric(3)" data-time="30">
+              Echoes float from far away
+            </p>
+            <p class="lyric lyric-text" onclick="playLyric(4)" data-time="40">
+              In the dark, we find our way
+            </p>
+            <p class="lyric lyric-text" onclick="playLyric(5)" data-time="50">
+              Fingers trace the fading light
+            </p>
+            <p class="lyric lyric-text" onclick="playLyric(6)" data-time="60">
+              Breathing in the calm of night
+            </p>
+            <p class="lyric lyric-text" onclick="playLyric(7)" data-time="70">
+              Every note a memory
+            </p>
+            <p class="lyric lyric-text" onclick="playLyric(8)" data-time="80">
+              Playing softly endlessly
+            </p>
+            <p class="lyric lyric-text" onclick="playLyric(9)" data-time="90">
+              Hearts align in steady tune
+            </p>
+            <p class="lyric lyric-text" onclick="playLyric(10)" data-time="100">
+              Dreaming under silver moon
+            </p>
+          </div>
+        </div>
+
+        <!-- Playlist -->
+        <div class="playlist-wrapper active">
+          <h3 class="header playlist-header-text">Playlist</h3>
+          <div class="playlist playlist-container">
+            <ul class="playlist-ul playlist-list">
+              <li class="song-name song-name-item active" onclick="playSong(1)">
+                <span class="song-title">1. Chill Vibes</span>
+                <span class="song-duration">3:45</span>
+              </li>
+              <li class="song-name song-name-item" onclick="playSong(2)">
+                <span class="song-title">2. Sunset Walk</span>
+                <span class="song-duration">4:20</span>
+              </li>
+              <li class="song-name song-name-item" onclick="playSong(3)">
+                <span class="song-title"
+                  >3. Night Breeze Everything but the girl like the deserts miss
+                  the rain Lorem ipsum dolor sit, amet consectetur adipisicing
+                  elit. Beatae facilis voluptate dolores dolor aut aperiam, quia
+                  praesentium itaque nam consequuntur.</span
+                >
+                <span class="song-duration">3:15</span>
+              </li>
+              <li class="song-name song-name-item" onclick="playSong(4)">
+                <span class="song-title">4. Ocean Eyes</span>
+                <span class="song-duration">4:00</span>
+              </li>
+              <li class="song-name song-name-item" onclick="playSong(5)">
+                <span class="song-title">5. Moonlight Echo</span>
+                <span class="song-duration">3:50</span>
+              </li>
+              <li class="song-name song-name-item" onclick="playSong(6)">
+                <span class="song-title">6. Coffee Clouds</span>
+                <span class="song-duration">2:58</span>
+              </li>
+              <li class="song-name song-name-item" onclick="playSong(7)">
+                <span class="song-title">7. Driftwood</span>
+                <span class="song-duration">4:12</span>
+              </li>
+              <li class="song-name song-name-item" onclick="playSong(8)">
+                <span class="song-title">8. Raindrop Lullaby</span>
+                <span class="song-duration">3:37</span>
+              </li>
+              <li class="song-name song-name-item" onclick="playSong(9)">
+                <span class="song-title">9. Echoes of You</span>
+                <span class="song-duration">4:05</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Settings -->
+    <div class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="control-btn close-btn">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-main">
+          <!-- Volume Control -->
+          <button class="control-btn volume-control volume-control-container">
+            <i class="fa-solid fa-volume-high icon-volume"></i>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value="80"
+              class="volume-slider"
+            />
+          </button>
+
+          <!-- Playlist Slide Show -->
+          <h5>Chọn Playlist</h5>
+          <div class="modal-section slideshow-section">
+            <div class="playlist-slide-show">
+              <div class="slideshow">
+                <div class="slideshow-track">
+                  <div
+                    class="slide-item"
+                    style="background-image: url('./images/image12.jpg')"
+                  >
+                    Playlist 1
+                  </div>
+                  <div
+                    class="slide-item"
+                    style="background-image: url('./images/image7.jpg')"
+                  >
+                    Playlist 2
+                  </div>
+                  <div
+                    class="slide-item"
+                    style="background-image: url('./images/image8.jpg')"
+                  >
+                    Playlist 3
+                  </div>
+                  <div
+                    class="slide-item"
+                    style="background-image: url('./images/image9.jpg')"
+                  >
+                    Playlist 4
+                  </div>
+                  <div
+                    class="slide-item"
+                    style="background-image: url('./images/image10.jpg')"
+                  >
+                    Playlist 5
+                  </div>
+                  <div
+                    class="slide-item"
+                    style="background-image: url('./images/image11.jpg')"
+                  >
+                    Playlist 6
+                  </div>
+                </div>
+                <button class="slideshow-button prev">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button class="slideshow-button next">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Samples -->
+          <h5>Chọn Theme</h5>
+          <div class="modal-section theme-section">
+            <div class="theme-sample">Dracula 1</div>
+            <div class="theme-sample">Dracula 2</div>
+            <div class="theme-sample">Dracula 3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script class="inline-script">
+      const $ = document.querySelector.bind(document);
+      const $$ = document.querySelectorAll.bind(document);
+      function playSong(songId) {
+        // Remove active class from all songs
+        document
+          .querySelectorAll(".song-name-item")
+          .forEach((item) => item.classList.remove("active"));
+        // Add active class to clicked song
+        document
+          .querySelector(`.song-name-item:nth-child(${songId})`)
+          .classList.add("active");
+        // Add your song playback logic here
+        console.log(`Playing song ${songId}`);
+      }
+
+      function playLyric(lyricId) {
+        // Remove active class from all lyrics
+        document
+          .querySelectorAll(".lyric-text")
+          .forEach((item) => item.classList.remove("active"));
+        // Add active class to clicked lyric
+        document
+          .querySelector(`.lyric-text:nth-child(${lyricId})`)
+          .classList.add("active");
+        // Get the time to seek to
+        const time = document.querySelector(`.lyric-text:nth-child(${lyricId})`)
+          .dataset.time;
+        // Add your playback logic to seek to the specified time
+        console.log(`Playing from lyric ${lyricId} at ${time} seconds`);
+      }
+    </script>
+    <script type="module" src="./js/main.js" class="player-script"></script>
+  </body>
+</html>
