@@ -61,11 +61,6 @@
   padding: 0;
 }
 
-html,
-body {
-  /* overflow: hidden; */
-}
-
 .body {
   font-family: var(--font-main);
   background: var(--bg-gradient-main);
@@ -156,12 +151,9 @@ body {
   position: relative;
 }
 
-body
-  > div.music-player.music-player-container
-  > div.controls-section.controls-section-container
-  > div.progress-container.progress-container-box
-  > span.current-time.current-time-text {
-  width: 30px;
+.current-time-text,
+.duration-text {
+  width: 2.5rem;
 }
 
 /* Progress bar */
@@ -174,7 +166,6 @@ body
   width: 30%;
   max-width: 100%;
   height: 100%;
-  transition: width 0.5s ease;
   border-radius: 12px;
   position: relative;
 }
@@ -578,11 +569,6 @@ body
   border-radius: 50%;
 }
 
-/* Playlist Slide Show */
-.modal-section.slideshow-section {
-  height: 250px;
-}
-
 .playlist-slide-show {
   border-radius: 12px;
   width: 100%;
@@ -591,9 +577,9 @@ body
 /* Slideshow Container */
 .slideshow {
   position: relative;
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
-  max-width: 400px;
+  max-width: 95%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 20px;

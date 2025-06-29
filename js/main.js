@@ -9,7 +9,6 @@ import { PlaylistManager } from "./playlistManager.js";
 import { PlayerControl } from "./playerController.js";
 
 window.addEventListener("DOMContentLoaded", () => {
-  // ==== Khởi tạo các module độc lập ====
   // Điều khiển Audio
   const audioController = new AudioController();
   // Xử lý lyrics
@@ -18,6 +17,11 @@ window.addEventListener("DOMContentLoaded", () => {
   const playerData = new PlayerData();
   // Lưu trữ và thao tác với local storage
   const storage = new Storage();
+  // Xử lý slideshow hiển thị playlist
+  const slideshow = new Slideshow({
+    transitionTime: 0.5,
+    autoPlayInterval: 3000,
+  });
   // Xử lý theme
   const themeManager = new ThemeManager(playerData.getAllThemes());
   // Xử lý playlist
@@ -25,11 +29,6 @@ window.addEventListener("DOMContentLoaded", () => {
     playerData.getAllPlaylists(),
     playerData.getAllSongs()
   );
-  // Xử lý slideshow hiển thị playlist
-  const slideshow = new Slideshow({
-    transitionTime: 0.5,
-    autoPlayInterval: 3000,
-  });
   // Quản lý trạng thái chính, giao diện, phát nhạc và điều khiển cơ bản
   // Cầu nối giao tiếp trung gian giữa các js, đặc biệt là audioController playerControler
   const player = new Player({
@@ -38,10 +37,9 @@ window.addEventListener("DOMContentLoaded", () => {
     data: playerData,
     theme: themeManager,
     storage,
-    slideshows: slideshow,
+    slideshow: slideshow,
     playlist: playlistManager,
   });
-
   // Gắn các điều khiển UI (PlayerControl) sau khi Player đã sẵn sàng
   const playerControl = new PlayerControl({
     player,
@@ -49,14 +47,6 @@ window.addEventListener("DOMContentLoaded", () => {
     lyrics: lyricsEngine,
     storage,
   });
-
-  // Chuẩn bị biến global để debug
-  window.audioController = audioController;
-  window.lyricsEngine = lyricsEngine;
-  window.playerData = playerData;
-  window.themeManager = themeManager;
-  window.slideshow = slideshow;
-  window.playlistManager = playlistManager;
+  // Tạo biến global để dễ truy cập
   window.player = player;
-  window.control = playerControl;
 });

@@ -15,6 +15,7 @@ export class PlaylistManager {
     this.playlists.forEach((pl) => {
       const slide = document.createElement("div");
       slide.classList.add("slide-item");
+      slide.classList.add("playlist-slide-item");
       slide.style.backgroundImage = `url('${pl.imgPath}')`;
       slide.textContent = pl.name;
       slide.dataset.id = pl.id;
@@ -49,6 +50,8 @@ export class PlaylistManager {
     if (songs.length > 0) {
       window.player?.playSong(songs[0]);
     }
+    // Khi nhấn chọn playlist xong thì tắt modal đi
+    document.querySelector(".modal").classList.remove("show");
   }
 
   renderSongList() {
@@ -59,9 +62,20 @@ export class PlaylistManager {
       li.classList.add("song-name", "song-name-item");
       if (index === 0) li.classList.add("active");
       li.dataset.id = song.id;
-
+      // Sự kiện nhấn vào bài hát trong playlist
       li.addEventListener("click", () => {
+        // Phát bài hát đã chọn
         window.player?.playSong(song);
+
+        // Khi nhấn phát bài hát đã chọn, cập nhật lại trạng thái active của các bài hát trong danh sách
+        const songItems = Array.from(
+          this.listContainer.querySelectorAll(".song-name-item")
+        );
+        const activeItem = songItems.find((item) =>
+          item.classList.contains("active")
+        );
+        activeItem.classList.remove("active");
+        li.classList.add("active");
       });
 
       const title = document.createElement("span");

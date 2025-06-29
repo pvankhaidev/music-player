@@ -8,70 +8,98 @@ export class PlayerControl {
   }
 
   initEvents() {
-    const $ = this.player.elements;
+    const elements = this.player.elements;
 
     // Play/Pause
-    $.playBtn.addEventListener("click", () =>
-      this.togglePlay(
-        $.playBtn,
-        '<i class="fa-solid fa-pause"></i>',
-        '<i class="fa-solid fa-play icon-play"></i>'
-      )
-    );
+    elements.playBtn.addEventListener("click", () => this.togglePlay());
 
     // Yêu thích
-    $.likeBtn.addEventListener("click", () =>
+    elements.likeBtn.addEventListener("click", () =>
       this.toggleLike(
-        $.likeBtn,
+        elements.likeBtn,
         '<i class="fa-solid fa-heart"></i>',
         '<i class="fa-regular fa-heart"></i>'
       )
     );
 
     // Lặp lại
-    $.repeatBtn.addEventListener("click", () => this.toggleRepeat($.repeatBtn));
+    elements.repeatBtn.addEventListener("click", () =>
+      this.toggleRepeat(elements.repeatBtn)
+    );
 
     // Trộn
-    $.shuffleBtn.addEventListener("click", () =>
-      this.toggleShuffle($.shuffleBtn)
+    elements.shuffleBtn.addEventListener("click", () =>
+      this.toggleShuffle(elements.shuffleBtn)
     );
 
     // Lyrics
-    $.lyricBtn.addEventListener("click", () =>
+    elements.lyricBtn.addEventListener("click", () =>
       this.toggleLyric(
-        $.lyricBtn,
+        elements.lyricBtn,
         '<i class="fa-solid fa-closed-captioning"></i>',
         '<i class="fa-regular fa-closed-captioning"></i>'
       )
     );
 
     // Volume slider
-    $.volumeSlider.addEventListener("input", (e) =>
-      this.setVolume(e.target.value, $.volumeControl.querySelector("i"))
+    elements.volumeSlider.addEventListener("input", (e) =>
+      this.setVolume(e.target.value, elements.volumeControl.querySelector("i"))
     );
 
     // Click icon volume để tắt tiếng / bật lại
-    $.volumeControl
+    elements.volumeControl
       .querySelector("i")
       .addEventListener("click", () =>
-        this.toggleMute($.volumeControl.querySelector("i"), $.volumeSlider)
+        this.toggleMute(
+          elements.volumeControl.querySelector("i"),
+          elements.volumeSlider
+        )
       );
 
     // Mở modal cài đặt
-    $.settingBtn.addEventListener("click", () => this.player.toggleModal());
+    elements.settingBtn.addEventListener("click", () =>
+      this.player.toggleModal()
+    );
 
     // Đóng modal khi click nút đóng
-    $.closeBtn.addEventListener("click", () => this.player.toggleModal());
+    elements.closeBtn.addEventListener("click", () =>
+      this.player.toggleModal()
+    );
 
     // Đóng modal khi click ra ngoài vùng nội dung
-    $.modal.addEventListener("click", (e) => {
-      if (e.target === $.modal) {
+    elements.modal.addEventListener("click", (e) => {
+      if (e.target === elements.modal) {
         this.player.toggleModal();
+      }
+    });
+
+    // Khi nhấn vào progress
+    elements.progressContainer.addEventListener("click", (e) => {
+      this.progressHandle(e);
+    });
+
+    // Xử lý khi kéo nút trên progress
+    let isDragging = false;
+
+    elements.progressHandle.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      document.body.style.userSelect = "none"; // tránh bôi đen
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      this.progressHandle(e); // Cập nhật thời gian theo vị trí chuột
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        document.body.style.userSelect = ""; // khôi phục cho phép bôi đen
       }
     });
   }
 
-  togglePlay(el, iconPause, iconPlay) {
+  togglePlay() {
     const isPlaying = this.player.state.isPlaying;
 
     if (isPlaying) {
@@ -79,8 +107,6 @@ export class PlayerControl {
     } else {
       this.player.playSong();
     }
-
-    // el.innerHTML = !isPlaying ? iconPause : iconPlay;
   }
 
   toggleLike(el, iconActive, iconNone) {
@@ -108,17 +134,17 @@ export class PlayerControl {
     const next = (this.player.state.loopMode + 1) % 3;
     this.player.state.loopMode = next;
 
-    el.classList.remove("inactive", "active", "single");
+    el.classList.remove("inactive", "single", "active");
     if (next === 0) el.classList.add("inactive");
-    if (next === 1) el.classList.add("active");
-    if (next === 2) el.classList.add("single");
+    if (next === 1) el.classList.add("single");
+    if (next === 2) el.classList.add("active");
   }
 
   toggleShuffle(el) {
-    const isNowOn = !this.player.state.isShuffle;
-    this.player.state.isShuffle = isNowOn;
+    const isShuffle = !this.player.state.isShuffle;
+    this.player.state.isShuffle = isShuffle;
 
-    el.classList.toggle("inactive", !isNowOn);
+    el.classList.toggle("inactive", !isShuffle);
   }
 
   toggleLyric(el, iconActive, iconNone) {
@@ -157,5 +183,9 @@ export class PlayerControl {
     }
 
     this.setVolume(sliderEl.value, iconEl);
+  }
+
+  progressHandle(e) {
+    this.player.progressHandle(e);
   }
 }
