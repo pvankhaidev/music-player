@@ -12,6 +12,8 @@ export class PlaylistManager {
   renderSlides() {
     this.trackContainer.innerHTML = "";
 
+    // TODO tạo playlisy yêu thích và playlist tất cả
+
     this.playlists.forEach((pl) => {
       const slide = document.createElement("div");
       slide.classList.add("slide-item");
@@ -94,5 +96,9 @@ export class PlaylistManager {
 
   getCurrentPlaylist() {
     return this.currentPlaylist;
+  }
+
+  shufflePlaylist() {
+    // TODO xáo trộn danh sách, render lại, trả về danh sách mới đã xáo trộn
   }
 }

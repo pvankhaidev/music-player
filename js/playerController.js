@@ -1,6 +1,3 @@
-// PlayerControl.js
-// Quản lý hành vi tương tác UI, điều khiển Player mà không can thiệp trực tiếp vào Audio hoặc DOM ngoài
-
 export class PlayerControl {
   constructor({ player }) {
     this.player = player;
@@ -97,6 +94,19 @@ export class PlayerControl {
         document.body.style.userSelect = ""; // khôi phục cho phép bôi đen
       }
     });
+
+    // Nhấn nút forward
+    elements.forwardBtn.addEventListener("click", this.nextSong);
+
+    // Nhấn nút backward
+    elements.backwardBtn.addEventListener("click", this.prevSong);
+  }
+
+  nextSong() {
+    this.player.nextSong();
+  }
+  prevSong() {
+    this.player.prevSong();
   }
 
   togglePlay() {
