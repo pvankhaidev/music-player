@@ -30,12 +30,6 @@ export class PlaylistManager {
 
   // Tạo tất cả play list, bao gồm "tất cả" & "yêu thích"
   renderAllSlides(favoriteSongIds = []) {
-    // Playlist "Yêu thích"
-    const favoriteSongs = favoriteSongIds
-      .map((id) => this.songs.find((s) => s.id === id))
-      .filter(Boolean);
-
-    // Kiểm tra xem playlist yêu thích đã tồn tại chưa, tránh trùng id
     const favPlaylistId = 1000001;
     const allPlaylistId = 1000002;
 
@@ -43,7 +37,7 @@ export class PlaylistManager {
       id: favPlaylistId,
       name: "Yêu thích",
       imgPath: "./images/image15.jpg",
-      songIds: favoriteSongs.map((s) => s.id),
+      songIds: favoriteSongIds,
     });
 
     // Playlist "Tất cả bài hát"
