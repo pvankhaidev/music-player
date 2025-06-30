@@ -12,8 +12,6 @@ export class PlaylistManager {
   renderSlides() {
     this.trackContainer.innerHTML = "";
 
-    // TODO tạo playlisy yêu thích và playlist tất cả
-
     this.playlists.forEach((pl) => {
       const slide = document.createElement("div");
       slide.classList.add("slide-item");
@@ -29,6 +27,34 @@ export class PlaylistManager {
     });
   }
 
+  renderAllSlides(favoriteSongIds = []) {
+    // Playlist "Yêu thích"
+    const favoriteSongs = favoriteSongIds
+      .map((id) => this.songs.find((s) => s.id === id))
+      .filter(Boolean);
+
+    // Kiểm tra xem playlist yêu thích đã tồn tại chưa, tránh trùng id
+    const favPlaylistId = 1000001;
+    const allPlaylistId = 1000002;
+
+    this.playlists.unshift({
+      id: favPlaylistId,
+      name: "Yêu thích",
+      imgPath: "./images/image15.jpg",
+      songIds: favoriteSongs.map((s) => s.id),
+    });
+
+    // Playlist "Tất cả bài hát"
+    this.playlists.unshift({
+      id: allPlaylistId,
+      name: "Tất cả bài hát",
+      imgPath: "./images/image16.jpg",
+      songIds: this.songs.map((s) => s.id),
+    });
+
+    this.renderSlides();
+  }
+
   applyPlaylist(id) {
     const playlist = this.playlists.find((pl) => pl.id === id);
     if (!playlist) return;
@@ -41,6 +67,7 @@ export class PlaylistManager {
     // Cập nhật playlist trong player.js
     if (window.player) {
       window.player.state.currentPlaylist = songs;
+      window.player.state.currentPlaylistId = id;
       window.player.state.isShuffle = false;
     }
 

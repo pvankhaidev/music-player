@@ -27,6 +27,16 @@ export class Storage {
     }
   }
 
+  // Lưu một object vào 1 key (giúp rõ ý)
+  setObject(key, obj) {
+    this.set(key, obj);
+  }
+
+  // Lấy một object từ key, nếu không có trả về defaultValue (mặc định là {})
+  getObject(key, defaultValue = {}) {
+    return this.get(key, defaultValue);
+  }
+
   // Xóa dữ liệu khỏi storage với removeItem và key
   remove(key) {
     this.storage.removeItem(key);

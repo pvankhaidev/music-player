@@ -12,11 +12,7 @@ export class PlayerControl {
 
     // Yêu thích
     elements.likeBtn.addEventListener("pointerup", () =>
-      this.toggleLike(
-        elements.likeBtn,
-        '<i class="fa-solid fa-heart"></i>',
-        '<i class="fa-regular fa-heart"></i>'
-      )
+      this.toggleLike(elements.likeBtn)
     );
 
     // Lặp lại
@@ -116,25 +112,20 @@ export class PlayerControl {
     }
   }
 
-  toggleLike(el, iconActive, iconNone) {
-    const current = this.player.state.currentSong;
-    if (!current) return;
+  toggleLike(el) {
+    const likedStatus = this.player.isCurrentSongLiked();
 
-    const liked = this.player.state.likedSongs;
-    const index = liked.findIndex((s) => s.id === current.id);
-    const isLiked = index === -1;
+    if (likedStatus !== null) {
+      // Trước khi toggle, trạng thái hiện tại
+      const { isLiked } = likedStatus;
 
-    if (isLiked) {
-      liked.push(current);
-    } else {
-      liked.splice(index, 1);
+      // Thực hiện toggle trạng thái trong player
+      this.player.toggleLike();
+
+      // Sau khi toggle, trạng thái mới sẽ là ngược lại
+      const newLiked = !isLiked;
+      this.player.updateLikeButton(el, newLiked);
     }
-
-    this.player.storage.set("likedSongs", liked);
-    this.player.state.likedSongs = liked;
-
-    el.classList.toggle("active", isLiked);
-    el.innerHTML = isLiked ? iconActive : iconNone;
   }
 
   toggleRepeat(el) {
