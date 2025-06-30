@@ -406,6 +406,7 @@
 .artist-name {
   max-width: 100%;
   height: 2.5rem;
+  line-height: 2.5rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

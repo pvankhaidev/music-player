@@ -12,7 +12,6 @@ export class Player {
     this.state = {
       isPlaying: false, // Trạng thái phát
       isShuffle: false, // Trạng thái trộn
-      isAutoSlideshow: false, // Trajgn thái auto play slideshow
       loopMode: 0, // Trạng thái lặp 0: none, 1: single, 2: all
       currentSong: null, // Thông tin bài hát hiện tại
       currentPlaylist: [], // Thông tin playlist hiện tại
@@ -69,10 +68,10 @@ export class Player {
     this.renderPlaylist();
     this.updateSongInfoUI();
     this.elements.progressFill.style.width = `0%`;
-    this.setupProgressListener();
+    this.setupAudioListener();
   }
 
-  setupProgressListener() {
+  setupAudioListener() {
     const { audio, elements } = this;
 
     // Khi tải xong audio, cập nhật thời lượng bài hát
@@ -105,6 +104,29 @@ export class Player {
     elements.progressContainer.addEventListener("pointerup", (e) => {
       const percent = e.offsetX / elements.progressContainer.clientWidth;
       audio.currentTime = percent * audio.duration;
+    });
+
+    // Repeat, tùy theo trạng thái repeat
+    this.audio.on("ended", () => {
+      const loopMode = this.state.loopMode;
+      if (loopMode === 1) {
+        // Lặp 1
+        this.audio.audio.currentTime = 0;
+        this.playSong();
+      } else {
+        if (loopMode === 2) {
+          // Lặp tất cả
+          this.nextSong();
+        } else {
+          // Lặp đến cuối danh sách rồi dừng
+          if (
+            this.state.currentPlaylist.indexOf(this.state.currentSong) !==
+            this.state.currentPlaylist.length - 1
+          ) {
+            this.nextSong();
+          }
+        }
+      }
     });
   }
 
@@ -282,8 +304,8 @@ export class Player {
     this.renderPlaylist();
   }
   // Chuyển đổi trạng thái loop 0: none 1: single 2: active
-  toggleRepeat() {
-    this.state.loopMode = (this.state.loopMode + 1) % 3;
+  setRepeatState(value) {
+    this.state.loopMode = value;
   }
   // Cập nhật thanh progress
   updateProgress() {

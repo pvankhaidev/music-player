@@ -139,7 +139,7 @@ export class PlayerControl {
 
   toggleRepeat(el) {
     const next = (this.player.state.loopMode + 1) % 3;
-    this.player.state.loopMode = next;
+    this.player.setRepeatState(next);
 
     el.classList.remove("inactive", "single", "active");
     if (next === 0) el.classList.add("inactive");
