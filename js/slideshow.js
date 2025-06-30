@@ -39,16 +39,16 @@ export class Slideshow {
 
   bindEvents() {
     // Gắn sự kiện cho nút prev và next
-    this.prevBtn?.addEventListener("click", () => this.handleSlide("prev"));
-    this.nextBtn?.addEventListener("click", () => this.handleSlide("next"));
+    this.prevBtn?.addEventListener("pointerup", () => this.handleSlide("prev"));
+    this.nextBtn?.addEventListener("pointerup", () => this.handleSlide("next"));
 
     // Dừng autoplay khi hover chuột
-    this.container.addEventListener("mouseenter", () => {
+    this.container.addEventListener("pointerenter", () => {
       this.container.dataset.autoplay = "false";
     });
 
     // Tiếp tục autoplay khi rời chuột
-    this.container.addEventListener("mouseleave", () => {
+    this.container.addEventListener("pointerleave", () => {
       this.container.dataset.autoplay = "true";
     });
 

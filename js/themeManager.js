@@ -47,7 +47,7 @@ export class ThemeManager {
       btn.style.background = theme["--bg-gradient-main"];
       btn.style.color = theme["--color-secondary"];
 
-      btn.addEventListener("click", () => {
+      btn.addEventListener("pointerup", () => {
         this.apply(id);
       });
 

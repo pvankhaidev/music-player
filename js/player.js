@@ -102,7 +102,7 @@ export class Player {
       this.updateProgress();
     });
 
-    elements.progressContainer.addEventListener("click", (e) => {
+    elements.progressContainer.addEventListener("pointerup", (e) => {
       const percent = e.offsetX / elements.progressContainer.clientWidth;
       audio.currentTime = percent * audio.duration;
     });

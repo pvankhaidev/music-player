@@ -23,7 +23,7 @@ export class PlaylistManager {
       slide.dataset.id = pl.id;
 
       // Click vào slide thì áp dụng playlist
-      slide.addEventListener("click", () => this.applyPlaylist(pl.id));
+      slide.addEventListener("pointerup", () => this.applyPlaylist(pl.id));
 
       this.trackContainer.appendChild(slide);
     });
@@ -66,7 +66,7 @@ export class PlaylistManager {
       // if (index === 0) li.classList.add("active");
       li.dataset.id = song.id;
       // Sự kiện nhấn vào bài hát trong playlist
-      li.addEventListener("click", () => {
+      li.addEventListener("pointerup", () => {
         // Phát bài hát đã chọn
         window.player?.playSong(song);
 

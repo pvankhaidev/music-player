@@ -8,10 +8,10 @@ export class PlayerControl {
     const elements = this.player.elements;
 
     // Play/Pause
-    elements.playBtn.addEventListener("click", () => this.togglePlay());
+    elements.playBtn.addEventListener("pointerup", () => this.togglePlay());
 
     // Yêu thích
-    elements.likeBtn.addEventListener("click", () =>
+    elements.likeBtn.addEventListener("pointerup", () =>
       this.toggleLike(
         elements.likeBtn,
         '<i class="fa-solid fa-heart"></i>',
@@ -20,17 +20,17 @@ export class PlayerControl {
     );
 
     // Lặp lại
-    elements.repeatBtn.addEventListener("click", () =>
+    elements.repeatBtn.addEventListener("pointerup", () =>
       this.toggleRepeat(elements.repeatBtn)
     );
 
     // Trộn
-    elements.shuffleBtn.addEventListener("click", () =>
+    elements.shuffleBtn.addEventListener("pointerup", () =>
       this.toggleShuffle(elements.shuffleBtn)
     );
 
     // Lyrics
-    elements.lyricBtn.addEventListener("click", () =>
+    elements.lyricBtn.addEventListener("pointerup", () =>
       this.toggleLyric(
         elements.lyricBtn,
         '<i class="fa-solid fa-closed-captioning"></i>',
@@ -46,7 +46,7 @@ export class PlayerControl {
     // Click icon volume để tắt tiếng / bật lại
     elements.volumeControl
       .querySelector("i")
-      .addEventListener("click", () =>
+      .addEventListener("pointerup", () =>
         this.toggleMute(
           elements.volumeControl.querySelector("i"),
           elements.volumeSlider
@@ -54,41 +54,41 @@ export class PlayerControl {
       );
 
     // Mở modal cài đặt
-    elements.settingBtn.addEventListener("click", () =>
+    elements.settingBtn.addEventListener("pointerup", () =>
       this.player.toggleModal()
     );
 
     // Đóng modal khi click nút đóng
-    elements.closeBtn.addEventListener("click", () =>
+    elements.closeBtn.addEventListener("pointerup", () =>
       this.player.toggleModal()
     );
 
     // Đóng modal khi click ra ngoài vùng nội dung
-    elements.modal.addEventListener("click", (e) => {
+    elements.modal.addEventListener("pointerup", (e) => {
       if (e.target === elements.modal) {
         this.player.toggleModal();
       }
     });
 
     // Khi nhấn vào progress
-    elements.progressContainer.addEventListener("click", (e) => {
+    elements.progressContainer.addEventListener("pointerup", (e) => {
       this.player.progressHandle(e);
     });
 
     // Xử lý khi kéo nút trên progress
     let isDragging = false;
 
-    elements.progressHandle.addEventListener("mousedown", (e) => {
+    elements.progressHandle.addEventListener("pointerdown", (e) => {
       isDragging = true;
       document.body.style.userSelect = "none"; // tránh bôi đen
     });
 
-    document.addEventListener("mousemove", (e) => {
+    document.addEventListener("pointermove", (e) => {
       if (!isDragging) return;
       this.player.progressHandle(e); // Cập nhật thời gian theo vị trí chuột
     });
 
-    document.addEventListener("mouseup", () => {
+    document.addEventListener("pointerup", () => {
       if (isDragging) {
         isDragging = false;
         document.body.style.userSelect = ""; // khôi phục cho phép bôi đen
@@ -96,12 +96,12 @@ export class PlayerControl {
     });
 
     // Nhấn nút forward
-    elements.forwardBtn.addEventListener("click", () => {
+    elements.forwardBtn.addEventListener("pointerup", () => {
       this.player.nextSong();
     });
 
     // Nhấn nút backward
-    elements.backwardBtn.addEventListener("click", () => {
+    elements.backwardBtn.addEventListener("pointerup", () => {
       this.player.prevSong();
     });
   }
