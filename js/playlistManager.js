@@ -9,6 +9,7 @@ export class PlaylistManager {
     this.currentPlaylist = [];
   }
 
+  // Tạo slideshow hiển thị playlist
   renderSlides() {
     this.trackContainer.innerHTML = "";
 
@@ -27,6 +28,7 @@ export class PlaylistManager {
     });
   }
 
+  // Tạo tất cả play list, bao gồm "tất cả" & "yêu thích"
   renderAllSlides(favoriteSongIds = []) {
     // Playlist "Yêu thích"
     const favoriteSongs = favoriteSongIds
@@ -54,7 +56,7 @@ export class PlaylistManager {
 
     this.renderSlides();
   }
-
+  // Áp dụng playlist
   applyPlaylist(id) {
     const playlist = this.playlists.find((pl) => pl.id === id);
     if (!playlist) return;
@@ -84,6 +86,7 @@ export class PlaylistManager {
     document.querySelector(".modal").classList.remove("show");
   }
 
+  // Tạo list bài hát trong playlist container
   renderSongList(playlist, activeId = -1) {
     this.listContainer.innerHTML = "";
 
@@ -120,6 +123,8 @@ export class PlaylistManager {
       li.appendChild(duration);
       this.listContainer.appendChild(li);
     });
+
+    // Chỉ định bài hát được active
     this.setActive(activeId);
   }
   // Chỉ định bài hát được active
@@ -133,7 +138,7 @@ export class PlaylistManager {
       }
     });
 
-    if (!isActived) {
+    if (!isActived && songs.length > 0) {
       songs[0].classList.add("active");
     }
   }

@@ -17,6 +17,7 @@ export class Player {
       currentPlaylist: [], // Thông tin playlist hiện tại
       currentPlaylistId: 0, // Id playlist hiện tại
       likedSongIds: [], // Danh sách những bài hát đã thích
+      themeName: "sand",
     };
 
     this.storageState = {
@@ -26,6 +27,7 @@ export class Player {
       currentPlaylist: [], // Thông tin playlist hiện tại
       currentPlaylistId: 0, // Id playlist hiện tại
       likedSongIds: [], // Danh sách những bài hát đã thích
+      themeName: "",
     };
 
     // Lấy DOM elements
@@ -66,32 +68,46 @@ export class Player {
   }
 
   init() {
-    // TODO: đọc dữ liệu storage
+    // Đọc dữ liệu storage
     this.loadStateFromStorage();
 
+    // Tạo mẫu theme
     this.theme.render();
-    this.playlistManager.renderAllSlides(this.state.likedSongIds);
-    // if (this.playlistManager.playlists.length > 0) {
-    //   this.playlistManager.applyPlaylist(this.playlistManager.playlists[0].id);
-    // }
 
-    if (this.state.currentPlaylistId) {
+    // Render theme đã được sử dụng lần trước, lưu trong storage
+    this.theme.apply(this.state.themeName);
+
+    // Render tất cả playlist, bao gồm "tất cả", "yêu thích" & các playlist trong playerData.js
+    this.playlistManager.renderAllSlides(this.state.likedSongIds);
+
+    // Load playlist được phát trước đó, lưu trong storage
+    if (this.state.currentPlaylistId && this.state.currentPlaylistId > 0) {
       this.playlistManager.applyPlaylist(this.state.currentPlaylistId);
     } else {
+      // Nếu không có thì load playlist đầu tiên, mặc định là tất cả bài hát
       const first = this.playlistManager.playlists[0];
       if (first) {
         this.playlistManager.applyPlaylist(first.id);
       }
     }
 
+    // Tạo và hiển thị playlist
     this.renderPlaylist();
+
+    // Hiển thị tên playlist
     this.renderPlaylistName();
+
+    // Cập nhật thông tin bài hát
     this.updateSongInfoUI();
+
+    // Cập nhật thanh progress đưa về ban đầu
     this.elements.progressFill.style.width = `0%`;
+
+    // Thiết lập các event của audio
     this.setupAudioListener();
   }
 
-  // Method đọc trạng thái lưu trong storage
+  // Đọc trạng thái lưu trong storage
   loadStateFromStorage() {
     const stored = this.storage.getObject("music_player_data", null);
     if (stored) {
@@ -103,10 +119,11 @@ export class Player {
       this.state.currentPlaylist = stored.currentPlaylist;
       this.state.currentPlaylistId = stored.currentPlaylistId;
       this.state.likedSongIds = stored.likedSongIds || [];
+      this.state.themeName = stored.themeName || "sand";
     }
   }
 
-  // Method lưu trạng thái vào storage
+  // Lưu trạng thái vào storage
   saveStateToStorage() {
     // Đồng bộ storageState với state trước khi lưu
     this.storageState.isShuffle = this.state.isShuffle;
@@ -115,6 +132,7 @@ export class Player {
     this.storageState.currentPlaylist = this.state.currentPlaylist;
     this.storageState.currentPlaylistId = this.state.currentPlaylistId;
     this.storageState.likedSongIds = this.state.likedSongIds;
+    this.storageState.themeName = this.state.themeName;
 
     this.storage.setObject("music_player_data", this.storageState);
   }
@@ -206,10 +224,12 @@ export class Player {
     this.updatePlaylistDisp();
     this.saveStateToStorage();
   }
+
   // Pause
   pauseSong() {
     this.audio.pause();
   }
+
   // Phát tiếp tục
   nextSong() {
     const song = this.state.currentSong;
@@ -221,6 +241,7 @@ export class Player {
     }
     this.playSong();
   }
+
   // Phát bài trước
   prevSong() {
     const song = this.state.currentSong;
@@ -260,6 +281,7 @@ export class Player {
     });
   }
 
+  // Xáo trộn playlist
   shufflePlaylist() {
     // Tạo bản sao của playlist hiện tại
     let tempPlaylist = this.state.currentPlaylist.slice();
@@ -289,9 +311,11 @@ export class Player {
     // Cập nhật lại playlist
     this.state.currentPlaylist = newPlaylist;
 
+    // Lưu vào storage
     this.saveStateToStorage();
   }
 
+  // Hàm xáo trộn mảng
   shuffleArray(array) {
     let currentIndex = array.length;
 
@@ -360,6 +384,7 @@ export class Player {
     this.elements.slideshow.dataset.autoplay =
       this.elements.modal.classList.contains("show");
   }
+
   // Chuyển đổi và cập nhật trạng thái liked
   toggleLike() {
     // Kiểm tra bài hát hiện tại có được yêu thích chưa
@@ -384,17 +409,20 @@ export class Player {
 
     this.playlistManager.renderAllSlides(this.state.likedSongIds);
   }
+
   // Chuyển đổi trạng thái trộn
   toggleShuffle() {
     this.state.isShuffle = !this.state.isShuffle;
     this.renderPlaylist();
     this.saveStateToStorage();
   }
+
   // Chuyển đổi trạng thái loop 0: none 1: single 2: active
   setRepeatState(value) {
     this.state.loopMode = value;
     this.saveStateToStorage();
   }
+
   // Cập nhật thanh progress
   updateProgress() {
     const current = this.audio.audio.currentTime;
@@ -408,6 +436,7 @@ export class Player {
       this.elements.currentTimeText.innerHTML = formattedCurrent;
     }
   }
+
   // Xử lý khi kéo nút tua
   progressHandle(e) {
     const container = this.elements.progressContainer;
@@ -442,6 +471,7 @@ export class Player {
     return { isLiked, index };
   }
 
+  // Cập nhật icon nút like
   updateLikeButton(el, isLiked) {
     el.classList.toggle("active", isLiked);
     el.innerHTML = isLiked

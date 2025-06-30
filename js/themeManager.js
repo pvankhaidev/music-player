@@ -37,18 +37,20 @@ export class ThemeManager {
 
     // Lặp qua toàn bộ obj theme bằng entries và forEach
     // Render mẫu chọn với dữ liệu đại diện trong theme
-    Object.entries(this.themes).forEach(([id, theme]) => {
+    Object.entries(this.themes).forEach(([name, theme]) => {
       const btn = document.createElement("div");
       btn.className = "theme-sample";
-      btn.textContent = theme.name || id;
-      btn.dataset.theme = id;
+      btn.textContent = theme.name || name;
+      btn.dataset.theme = name;
 
       // Tạo mẫu với màu nền và màu chữ chính
       btn.style.background = theme["--bg-gradient-main"];
       btn.style.color = theme["--color-secondary"];
 
       btn.addEventListener("pointerup", () => {
-        this.apply(id);
+        this.apply(name);
+        window.player.state.themeName = name;
+        window.player.saveStateToStorage();
       });
 
       this.container.appendChild(btn);
