@@ -276,38 +276,6 @@
         </div>
       </div>
     </div>
-    <script class="inline-script">
-      const $ = document.querySelector.bind(document);
-      const $$ = document.querySelectorAll.bind(document);
-      function playSong(songId) {
-        // Remove active class from all songs
-        document
-          .querySelectorAll(".song-name-item")
-          .forEach((item) => item.classList.remove("active"));
-        // Add active class to clicked song
-        document
-          .querySelector(`.song-name-item:nth-child(${songId})`)
-          .classList.add("active");
-        // Add your song playback logic here
-        console.log(`Playing song ${songId}`);
-      }
-
-      function playLyric(lyricId) {
-        // Remove active class from all lyrics
-        document
-          .querySelectorAll(".lyric-text")
-          .forEach((item) => item.classList.remove("active"));
-        // Add active class to clicked lyric
-        document
-          .querySelector(`.lyric-text:nth-child(${lyricId})`)
-          .classList.add("active");
-        // Get the time to seek to
-        const time = document.querySelector(`.lyric-text:nth-child(${lyricId})`)
-          .dataset.time;
-        // Add your playback logic to seek to the specified time
-        console.log(`Playing from lyric ${lyricId} at ${time} seconds`);
-      }
-    </script>
     <script type="module" src="./js/main.js" class="player-script"></script>
   </body>
 </html>

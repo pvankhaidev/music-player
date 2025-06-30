@@ -57,9 +57,15 @@ export class Player {
   }
 
   init() {
+    // TODO: đọc dữ liệu storage
     // Tạo mẫu họn theme
     this.theme.render();
     this.playlistManager.renderSlides();
+    // TODO: Kiểm tra dữ liệu storage để chọn và render playlist
+    // Mặc định chọn playlist đầu tiên
+    if (this.playlistManager.playlists.length > 0) {
+      this.playlistManager.applyPlaylist(this.playlistManager.playlists[0].id);
+    }
     this.renderPlaylist();
     this.updateSongInfoUI();
     this.elements.progressFill.style.width = `0%`;
@@ -83,14 +89,12 @@ export class Player {
     this.audio.on("play", () => {
       this.state.isPlaying = true;
       this.updatePlayBtnUI();
-      console.log("play");
     });
 
     // Cập nhật icon khi pause
     this.audio.on("pause", () => {
       this.state.isPlaying = false;
       this.updatePlayBtnUI();
-      console.log("pause");
     });
 
     // Cập nhật progress khi phát
@@ -122,26 +126,41 @@ export class Player {
     this.state.currentSong = song;
     this.audio.play(song.songPath);
     this.lyrics.load(song.lyric);
-
     this.updateSongInfoUI();
+    this.updatePlaylistDisp();
   }
   // Pause
   pauseSong() {
     this.audio.pause();
-    // this.state.isPlaying = false;
   }
   // Phát tiếp tục
   nextSong() {
-    // TODO: dùng playlistManager.getNextSong()
+    const song = this.state.currentSong;
+    const playlist = this.state.currentPlaylist;
+    const index = playlist.indexOf(song);
+    if (index >= 0) {
+      const nextIndex = (index + 1) % playlist.length;
+      this.state.currentSong = playlist[nextIndex];
+    }
+    this.playSong();
   }
   // Phát bài trước
   prevSong() {
-    // TODO: dùng playlistManager.getPrevSong()
+    const song = this.state.currentSong;
+    const playlist = this.state.currentPlaylist;
+    const index = playlist.indexOf(song);
+    if (index >= 0) {
+      const prevIndex = (index + playlist.length - 1) % playlist.length;
+      this.state.currentSong = playlist[prevIndex];
+    }
+    this.playSong();
   }
+
   // Thay đổi âm lượng
   setVolume(value) {
     this.audio.setVolume(value);
   }
+
   // Cập nhật tên bài hát, tác giả, ảnh cover
   updateSongInfoUI() {
     const song = this.state.currentSong;
@@ -150,12 +169,89 @@ export class Player {
     this.elements.songTitleText.textContent = song.name;
     this.elements.artistNameText.textContent = song.artist;
   }
+
+  // Cập nhật hiển thị playlist
+  updatePlaylistDisp() {
+    const songEls = Array.from(
+      this.elements.playlistList.querySelectorAll("li")
+    );
+    songEls.forEach((el) => {
+      el.classList.remove("active");
+      if (Number(el.dataset.id) === this.state.currentSong.id) {
+        el.classList.add("active");
+      }
+    });
+  }
+
+  shufflePlaylist() {
+    // Tạo bản sao của playlist hiện tại
+    let tempPlaylist = this.state.currentPlaylist.slice();
+
+    // Tạo mảng mới
+    let newPlaylist = [];
+
+    // Lấy bài đang phát hiện tại
+    const song = this.state.currentSong;
+
+    // Tìm vị trí bài đó trong playlist
+    const orgIndex = tempPlaylist.indexOf(song);
+    if (orgIndex < 0) return;
+
+    // Xóa bài đang phát ra khỏi mảng tạm
+    tempPlaylist.splice(orgIndex, 1);
+
+    // Xáo trộn phần còn lại
+    this.shuffleArray(tempPlaylist);
+
+    // Đưa bài đang phát lên đầu danh sách mới
+    newPlaylist.push(song);
+
+    // Nối thêm phần còn lại
+    newPlaylist = newPlaylist.concat(tempPlaylist);
+
+    // Cập nhật lại playlist
+    this.state.currentPlaylist = newPlaylist;
+  }
+
+  shuffleArray(array) {
+    let currentIndex = array.length;
+
+    while (currentIndex != 0) {
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+  }
+
   // Tạo playlist
   renderPlaylist() {
-    const songs = this.playlistManager.getCurrentPlaylist();
-    this.state.currentPlaylist = songs;
-    this.state.currentSong = songs[0];
+    // Kiểm tra trạng thái trộn
+    if (this.state.isShuffle) {
+      this.shufflePlaylist();
+      this.playlistManager.renderSongList(
+        this.state.currentPlaylist,
+        this.state.currentSong?.id ?? -1
+      );
+    } else {
+      const songs = this.playlistManager.getCurrentPlaylist().slice();
+      this.state.currentPlaylist = songs;
+
+      const currentId = this.state.currentSong?.id ?? songs[0]?.id ?? null;
+
+      this.state.currentSong =
+        songs.find((s) => s.id === currentId) ?? songs[0];
+
+      this.playlistManager.renderSongList(
+        songs,
+        this.state.currentSong?.id ?? -1
+      );
+    }
   }
+
   // Ẩn hiện modal
   toggleModal() {
     this.elements.modal.classList.toggle("show");
@@ -183,6 +279,7 @@ export class Player {
   // Chuyển đổi trạng thái trộn
   toggleShuffle() {
     this.state.isShuffle = !this.state.isShuffle;
+    this.renderPlaylist();
   }
   // Chuyển đổi trạng thái loop 0: none 1: single 2: active
   toggleRepeat() {

@@ -72,7 +72,7 @@ export class PlayerControl {
 
     // Khi nhấn vào progress
     elements.progressContainer.addEventListener("click", (e) => {
-      this.progressHandle(e);
+      this.player.progressHandle(e);
     });
 
     // Xử lý khi kéo nút trên progress
@@ -85,7 +85,7 @@ export class PlayerControl {
 
     document.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
-      this.progressHandle(e); // Cập nhật thời gian theo vị trí chuột
+      this.player.progressHandle(e); // Cập nhật thời gian theo vị trí chuột
     });
 
     document.addEventListener("mouseup", () => {
@@ -96,17 +96,14 @@ export class PlayerControl {
     });
 
     // Nhấn nút forward
-    elements.forwardBtn.addEventListener("click", this.nextSong);
+    elements.forwardBtn.addEventListener("click", () => {
+      this.player.nextSong();
+    });
 
     // Nhấn nút backward
-    elements.backwardBtn.addEventListener("click", this.prevSong);
-  }
-
-  nextSong() {
-    this.player.nextSong();
-  }
-  prevSong() {
-    this.player.prevSong();
+    elements.backwardBtn.addEventListener("click", () => {
+      this.player.prevSong();
+    });
   }
 
   togglePlay() {
@@ -152,9 +149,8 @@ export class PlayerControl {
 
   toggleShuffle(el) {
     const isShuffle = !this.player.state.isShuffle;
-    this.player.state.isShuffle = isShuffle;
-
     el.classList.toggle("inactive", !isShuffle);
+    this.player.toggleShuffle();
   }
 
   toggleLyric(el, iconActive, iconNone) {
@@ -193,9 +189,5 @@ export class PlayerControl {
     }
 
     this.setVolume(sliderEl.value, iconEl);
-  }
-
-  progressHandle(e) {
-    this.player.progressHandle(e);
   }
 }

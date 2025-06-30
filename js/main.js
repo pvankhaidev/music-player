@@ -1,5 +1,5 @@
 import { AudioController } from "./audioController.js";
-import { LyricsEngine } from "./lyricsEngine.js";
+import { LyricsManager } from "./lyricsManager.js";
 import { PlayerData } from "./playerData.js";
 import { ThemeManager } from "./themeManager.js";
 import { Storage } from "./storage.js";
@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // Điều khiển Audio
   const audioController = new AudioController();
   // Xử lý lyrics
-  const lyricsEngine = new LyricsEngine();
+  const lyricsManager = new LyricsManager();
   // Lưu trữ và xử lý dữ liệu bài hát, playlist, theme
   const playerData = new PlayerData();
   // Lưu trữ và thao tác với local storage
@@ -33,7 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // Cầu nối giao tiếp trung gian giữa các js, đặc biệt là audioController playerControler
   const player = new Player({
     audio: audioController,
-    lyrics: lyricsEngine,
+    lyrics: lyricsManager,
     data: playerData,
     theme: themeManager,
     storage,
@@ -44,7 +44,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const playerControl = new PlayerControl({
     player,
     audio: audioController,
-    lyrics: lyricsEngine,
+    lyrics: lyricsManager,
     storage,
   });
   // Tạo biến global để dễ truy cập

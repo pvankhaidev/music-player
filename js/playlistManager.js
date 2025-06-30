@@ -27,11 +27,6 @@ export class PlaylistManager {
 
       this.trackContainer.appendChild(slide);
     });
-
-    // Mặc định chọn playlist đầu tiên
-    if (this.playlists.length > 0) {
-      this.applyPlaylist(this.playlists[0].id);
-    }
   }
 
   applyPlaylist(id) {
@@ -43,26 +38,32 @@ export class PlaylistManager {
       .filter(Boolean);
 
     this.currentPlaylist = songs;
+    // Cập nhật playlist trong player.js
+    if (window.player) {
+      window.player.state.currentPlaylist = songs;
+      window.player.state.isShuffle = false;
+    }
 
     this.headerElement.textContent = playlist.name;
 
-    this.renderSongList();
+    this.renderSongList(this.currentPlaylist);
 
     // Tự động phát bài đầu tiên
     if (songs.length > 0) {
       window.player?.playSong(songs[0]);
     }
+
     // Khi nhấn chọn playlist xong thì tắt modal đi
     document.querySelector(".modal").classList.remove("show");
   }
 
-  renderSongList() {
+  renderSongList(playlist, activeId = -1) {
     this.listContainer.innerHTML = "";
 
-    this.currentPlaylist.forEach((song, index) => {
+    playlist.forEach((song, index) => {
       const li = document.createElement("li");
       li.classList.add("song-name", "song-name-item");
-      if (index === 0) li.classList.add("active");
+      // if (index === 0) li.classList.add("active");
       li.dataset.id = song.id;
       // Sự kiện nhấn vào bài hát trong playlist
       li.addEventListener("click", () => {
@@ -92,13 +93,25 @@ export class PlaylistManager {
       li.appendChild(duration);
       this.listContainer.appendChild(li);
     });
+    this.setActive(activeId);
+  }
+  // Chỉ định bài hát được active
+  setActive(id) {
+    const songs = Array.from(this.listContainer.querySelectorAll("li"));
+    let isActived = false;
+    songs.forEach((song) => {
+      if (Number(song.dataset.id) === id) {
+        song.classList.add("active");
+        isActived = true;
+      }
+    });
+
+    if (!isActived) {
+      songs[0].classList.add("active");
+    }
   }
 
   getCurrentPlaylist() {
     return this.currentPlaylist;
-  }
-
-  shufflePlaylist() {
-    // TODO xáo trộn danh sách, render lại, trả về danh sách mới đã xáo trộn
   }
 }

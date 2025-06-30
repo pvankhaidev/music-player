@@ -1,4 +1,4 @@
-export class LyricsEngine {
+export class LyricsManager {
   constructor() {
     this.subs = [];
     this.currentIndex = -1;
