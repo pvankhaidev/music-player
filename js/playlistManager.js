@@ -39,7 +39,7 @@ export class PlaylistManager {
     const favPlaylistId = 1000001;
     const allPlaylistId = 1000002;
 
-    this.playlists.unshift({
+    this.playlists.push({
       id: favPlaylistId,
       name: "Yêu thích",
       imgPath: "./images/image15.jpg",
@@ -47,7 +47,7 @@ export class PlaylistManager {
     });
 
     // Playlist "Tất cả bài hát"
-    this.playlists.unshift({
+    this.playlists.push({
       id: allPlaylistId,
       name: "Tất cả bài hát",
       imgPath: "./images/image16.jpg",
@@ -98,7 +98,7 @@ export class PlaylistManager {
       // Sự kiện nhấn vào bài hát trong playlist
       li.addEventListener("pointerup", () => {
         // Phát bài hát đã chọn
-        window.player?.playSong(song);
+        window.player?.playSong(song, "1");
 
         // Khi nhấn phát bài hát đã chọn, cập nhật lại trạng thái active của các bài hát trong danh sách
         const songItems = Array.from(

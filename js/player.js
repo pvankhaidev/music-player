@@ -21,8 +21,6 @@ export class Player {
     };
 
     this.storageState = {
-      isShuffle: false, // Trạng thái trộn
-      loopMode: 0, // Trạng thái lặp 0: none, 1: single, 2: all
       currentSong: null, // Thông tin bài hát hiện tại
       currentPlaylist: [], // Thông tin playlist hiện tại
       currentPlaylistId: 0, // Id playlist hiện tại
@@ -105,6 +103,11 @@ export class Player {
 
     // Thiết lập các event của audio
     this.setupAudioListener();
+
+    // Thiết lập playlist slideshow
+    this.slideshow.slideItems =
+      this.elements.slideshow.querySelectorAll(".slide-item");
+    this.slideshow.init();
   }
 
   // Đọc trạng thái lưu trong storage
@@ -113,8 +116,6 @@ export class Player {
     if (stored) {
       this.storageState = stored;
       // Đồng bộ sang state chính
-      this.state.isShuffle = stored.isShuffle;
-      this.state.loopMode = stored.loopMode;
       this.state.currentSong = stored.currentSong;
       this.state.currentPlaylist = stored.currentPlaylist;
       this.state.currentPlaylistId = stored.currentPlaylistId;
@@ -126,10 +127,8 @@ export class Player {
   // Lưu trạng thái vào storage
   saveStateToStorage() {
     // Đồng bộ storageState với state trước khi lưu
-    this.storageState.isShuffle = this.state.isShuffle;
-    this.storageState.loopMode = this.state.loopMode;
     this.storageState.currentSong = this.state.currentSong;
-    this.storageState.currentPlaylist = this.state.currentPlaylist;
+    this.storageState.currentPlaylist = this.playlistManager.currentPlaylist;
     this.storageState.currentPlaylistId = this.state.currentPlaylistId;
     this.storageState.likedSongIds = this.state.likedSongIds;
     this.storageState.themeName = this.state.themeName;
@@ -214,14 +213,14 @@ export class Player {
   }
 
   // Play
-  playSong(song = this.state.currentSong) {
+  playSong(song = this.state.currentSong, clickState = "") {
     if (!song) return;
 
     this.state.currentSong = song;
     this.audio.play(song.songPath);
     this.lyrics.load(song.lyric);
     this.updateSongInfoUI();
-    this.updatePlaylistDisp();
+    this.updatePlaylistDisp(clickState);
     this.saveStateToStorage();
   }
 
@@ -269,7 +268,7 @@ export class Player {
   }
 
   // Cập nhật hiển thị playlist
-  updatePlaylistDisp() {
+  updatePlaylistDisp(clickState) {
     const songEls = Array.from(
       this.elements.playlistList.querySelectorAll("li")
     );
@@ -277,6 +276,12 @@ export class Player {
       el.classList.remove("active");
       if (Number(el.dataset.id) === this.state.currentSong.id) {
         el.classList.add("active");
+        // Nếu là click thì không cuộn
+        if (clickState !== "1") {
+          el.scrollIntoView({
+            behavior: "smooth",
+          });
+        }
       }
     });
   }

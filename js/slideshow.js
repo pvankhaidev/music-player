@@ -12,7 +12,9 @@ export class Slideshow {
     // Lấy config từ options truyền vào
     this.transitionTime = options.transitionTime || 0.3;
     this.autoPlayInterval = options.autoPlayInterval || 3000;
+  }
 
+  init() {
     this.setupDOM(); // Tạo pagination và gán style ban đầu
     this.bindEvents(); // Gắn sự kiện click, hover
     this.setupAutoPlay(); // Thiết lập tự chạy slideshow
@@ -59,7 +61,7 @@ export class Slideshow {
     // Tự động click nút "next" sau mỗi khoảng thời gian
     setInterval(() => {
       if (this.container.dataset.autoplay === "true") {
-        this.nextBtn?.dispatchEvent(new Event("click"));
+        this.nextBtn?.dispatchEvent(new Event("pointerup"));
       }
     }, this.autoPlayInterval);
   }
