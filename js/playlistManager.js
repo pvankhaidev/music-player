@@ -29,7 +29,7 @@ export class PlaylistManager {
   }
 
   // Tạo tất cả play list, bao gồm "tất cả" & "yêu thích"
-  renderAllSlides(favoriteSongIds = []) {
+  renderAllSlides(likedSongIds = []) {
     const favPlaylistId = 1000001;
     const allPlaylistId = 1000002;
 
@@ -37,7 +37,7 @@ export class PlaylistManager {
       id: favPlaylistId,
       name: "Yêu thích",
       imgPath: "./images/image15.jpg",
-      songIds: favoriteSongIds,
+      songIds: likedSongIds,
     });
 
     // Playlist "Tất cả bài hát"
